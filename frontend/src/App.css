@@ -1,0 +1,343 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+}
+
+#root {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+/* Page title */
+
+h1 {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+/* Search form */
+
+.required-note {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+form {
+  background: white;
+  padding: 24px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+form > div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+form label {
+  width: 120px;
+  font-weight: bold;
+}
+
+form input {
+  flex: 1;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #555;
+}
+
+form button {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form button:hover {
+  opacity: 0.8;
+}
+
+form button:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+form select {
+  flex: 1;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  box-sizing: border-box;
+}
+
+form select:focus {
+  outline: none;
+  border-color: #555;
+}
+
+
+/* Month tabs */
+.month-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.month-tab {
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.month-tab:hover {
+  background: #f0f0f0;
+}
+
+.month-tab.active {
+  background: #333;
+  color: white;
+  border-color: #333;
+}
+
+h2 {
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+/* Concert cards */
+.concert-card {
+  display: flex;
+  padding: 18px 0;
+  border-bottom: 1px solid #ddd;
+  background: white;
+}
+
+.concert-artist-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-left: 20px;
+  margin-right: 12px;
+}
+
+.concert-date {
+  width: 60px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.concert-month {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.concert-day {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.concert-details {
+  flex: 1;
+  text-align: left;
+}
+
+.concert-artist {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.concert-location {
+  margin-top: 4px;
+  font-size: 15px;
+}
+
+.concert-time {
+  margin-top: 4px;
+  font-size: 15px;
+}
+
+.concert-ticket {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 15px;
+}
+
+/* No results */
+.no-results {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+}
+
+.no-results h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.no-results p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+/* Search sections */
+
+.search-section {
+  margin-bottom: 30px;
+}
+
+
+/* Search summary header */
+
+.search-summary-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  background: white;
+
+  margin-bottom: 15px;
+}
+
+
+/* Clickable portion of the header */
+
+.search-header-main {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 16px 20px;
+
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+  text-align: left;
+}
+
+
+/* Change the background only when hovering over
+   the clickable portion */
+
+.search-summary-header:hover {
+  background: #f5f5f5;
+}
+
+/* Arrow */
+
+.search-arrow {
+  width: 20px;
+  flex-shrink: 0;
+
+  font-size: 14px;
+}
+
+
+/* Search summary text */
+
+.search-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+
+.search-summary strong {
+  font-size: 18px;
+}
+
+
+.search-summary span {
+  font-size: 14px;
+  color: #666;
+}
+
+
+/* Remove X */
+
+.remove-search-button {
+  flex-shrink: 0;
+
+  margin-right: 12px;
+
+  padding: 4px 10px;
+
+  border: none;
+  background: transparent;
+
+  font-size: 24px;
+  line-height: 1;
+
+  color: #666;
+
+  cursor: pointer;
+}
+
+
+.remove-search-button:hover {
+  color: #000;
+}
+
+/* Add search */
+
+.add-search-button {
+  display: inline-block;
+
+  padding: 10px 18px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  background: white;
+  color: #555;
+
+  font-size: 15px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.add-search-button:hover {
+  background: #f5f5f5;
+  border-color: #999;
+  color: #222;
+}
