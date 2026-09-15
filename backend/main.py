@@ -5,13 +5,12 @@ from datetime import datetime, timezone
 import time
 from pydantic import BaseModel
 
-# python -m uvicorn main:app --reload
 # Allow React to access FastAPI
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "https://concert-tracker-74ihsamfu-yannie1.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
