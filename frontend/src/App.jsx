@@ -212,7 +212,6 @@ function App() {
       return;
     }
 
-
     // Clear previous results and errors for this search
     setSearches((currentSearches) =>
       currentSearches.map((currentSearch) =>
@@ -251,8 +250,10 @@ function App() {
 
 
     try {
+      const API_URL = import.meta.env.VITE_API_URL;
+
       const response = await fetch(
-        "http://127.0.0.1:8000/api/events/search",
+        `${API_URL}/api/events/search`,
         {
           method: "POST",
 
