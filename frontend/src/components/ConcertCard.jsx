@@ -1,3 +1,16 @@
+function formatTime(time) {
+  if (!time) {
+    return "";
+  }
+
+  const date = new Date(`1970-01-01T${time}`);
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
 function ConcertCard({ event }) {
   const date = new Date(`${event.date}T00:00:00`);
 
@@ -23,23 +36,27 @@ function ConcertCard({ event }) {
       </div>
 
       <div className="concert-details">
-        <div className="concert-artist">{event.artist}</div>
+        <div className="concert-artist">
+          {event.artist}
+        </div>
 
         <div className="concert-location">
           {event.location} | {event.venue}
         </div>
 
-        <div className="concert-time">{event.time}</div>
-
-        <a
-          className="concert-ticket"
-          href={event.ticket_url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Tickets
-        </a>
+        <div className="concert-time">
+          {formatTime(event.time)}
+        </div>
       </div>
+
+      <a
+        className="concert-ticket"
+        href={event.ticket_url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Tickets →
+      </a>
     </div>
   );
 }

@@ -113,9 +113,9 @@ function App() {
       currentSearches.map((search) =>
         search.id === searchId
           ? {
-              ...search,
-              expanded: !search.expanded,
-            }
+            ...search,
+            expanded: !search.expanded,
+          }
           : search
       )
     );
@@ -200,7 +200,6 @@ function App() {
       return;
     }
 
-
     // Radius requires a city
     if (search.radius && !search.city) {
       updateSearch(
@@ -217,15 +216,14 @@ function App() {
       currentSearches.map((currentSearch) =>
         currentSearch.id === searchId
           ? {
-              ...currentSearch,
-              loading: true,
-              error: null,
-              events: [],
-            }
+            ...currentSearch,
+            loading: true,
+            error: null,
+            events: [],
+          }
           : currentSearch
       )
     );
-
 
     // Build the request that FastAPI expects
     const searchRequest = {
@@ -265,16 +263,13 @@ function App() {
         }
       );
 
-
       if (!response.ok) {
         throw new Error(
           "Failed to search for concerts"
         );
       }
 
-
       const data = await response.json();
-
 
       // Sort events chronologically
       const sortedEvents = sortEvents(data);
@@ -286,18 +281,17 @@ function App() {
         search.endDate
       );
 
-
       // Save results only to this search
       setSearches((currentSearches) =>
         currentSearches.map((currentSearch) =>
           currentSearch.id === searchId
             ? {
-                ...currentSearch,
-                events: sortedEvents,
-                loading: false,
-                error: null,
-                selectedMonth: months[0] || null,
-              }
+              ...currentSearch,
+              events: sortedEvents,
+              loading: false,
+              error: null,
+              selectedMonth: months[0] || null,
+            }
             : currentSearch
         )
       );
@@ -306,10 +300,10 @@ function App() {
         currentSearches.map((currentSearch) =>
           currentSearch.id === searchId
             ? {
-                ...currentSearch,
-                loading: false,
-                error: error.message,
-              }
+              ...currentSearch,
+              loading: false,
+              error: error.message,
+            }
             : currentSearch
         )
       );
@@ -320,6 +314,7 @@ function App() {
   return (
     <div>
       <h1>Concert Tracker</h1>
+      <p className="app-subtitle">⭐️ Find your next show ⭐️</p>
 
 
       {searches.map((search) => {
@@ -446,15 +441,11 @@ function App() {
                             </p>
                           </div>
                         )}
-
                       </section>
-
                     </>
                   )}
-
               </>
             )}
-
           </div>
         );
       })}

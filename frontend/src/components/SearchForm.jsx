@@ -6,7 +6,7 @@ function SearchForm({
   onToggle,
 }) {
   return (
-    <div className="search-section">
+    <div>
 
       {/* Collapsed search summary */}
       {!search.expanded && (
@@ -125,78 +125,78 @@ function SearchForm({
             </div>
 
 
-            <div>
-              <label>City</label>
+            <div className="search-row">
+              <div>
+                <label>City</label>
+                <input
+                  type="text"
+                  value={search.city}
+                  onChange={(event) =>
+                    onChange(
+                      search.id,
+                      "city",
+                      event.target.value
+                    )
+                  }
+                  placeholder="Washington, DC"
+                />
+              </div>
 
-              <input
-                type="text"
-                value={search.city}
-                onChange={(event) =>
-                  onChange(
-                    search.id,
-                    "city",
-                    event.target.value
-                  )
-                }
-                placeholder="Washington, DC"
-              />
+              <div className="radius-field">
+                <label>Radius (miles)</label>
+                <input
+                  type="number"
+                  value={search.radius}
+                  onChange={(event) =>
+                    onChange(
+                      search.id,
+                      "radius",
+                      event.target.value
+                    )
+                  }
+                  placeholder="Leave blank for city only"
+                  min="1"
+                />
+              </div>
             </div>
 
 
-            <div>
-              <label>Radius (miles)</label>
+            <div className="search-row">
+              <div>
+                <label>Start Date *</label>
+                <input
+                  type="date"
+                  value={search.startDate}
+                  onChange={(event) =>
+                    onChange(
+                      search.id,
+                      "startDate",
+                      event.target.value
+                    )
+                  }
+                />
+              </div>
 
-              <input
-                type="number"
-                value={search.radius}
-                onChange={(event) =>
-                  onChange(
-                    search.id,
-                    "radius",
-                    event.target.value
-                  )
-                }
-                placeholder="Leave blank to search only within the selected city."
-                min="1"
-              />
-            </div>
+              <div className="end-date-field">
+                <div className="end-date-input-row">
+                  <label>End Date</label>
+                  <input
+                    type="date"
+                    value={search.endDate}
+                    onChange={(event) =>
+                      onChange(
+                        search.id,
+                        "endDate",
+                        event.target.value
+                      )
+                    }
+                  />
+                </div>
 
-
-            <div>
-              <label>Start Date *</label>
-
-              <input
-                type="date"
-                value={search.startDate}
-                onChange={(event) =>
-                  onChange(
-                    search.id,
-                    "startDate",
-                    event.target.value
-                  )
-                }
-              />
-            </div>
-
-
-            <div>
-              <label>End Date</label>
-
-              <input
-                type="date"
-                value={search.endDate}
-                onChange={(event) =>
-                  onChange(
-                    search.id,
-                    "endDate",
-                    event.target.value
-                  )
-                }
-              />
-
-              <small>
-                If blank, defaults to 6 months after the start date.
-              </small>
+                <small>
+                  If blank, defaults to 6 months after the start date.
+                </small>
+              </div>
             </div>
 
 

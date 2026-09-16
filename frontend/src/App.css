@@ -1,343 +1,700 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+/* ================================
+   Global
+================================ */
+
+:root {
+  --background: #0b0b0f;
+  --surface: #141419;
+  --surface-hover: #1b1b22;
+  --border: #292932;
+
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+
+  --accent: #a855f7;
+  --accent-hover: #c084fc;
+
+  --danger: #f87171;
+
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f7f7f7;
+
+  font-family:
+    "Montserrat",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(168, 85, 247, 0.12),
+      transparent 35%
+    ),
+    var(--background);
+
+  color: var(--text-primary);
+  min-height: 100vh;
 }
 
 #root {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 60px 30px;
 }
 
-/* Page title */
+
+/* ================================
+   Page Header
+================================ */
 
 h1 {
-  text-align: left;
-  margin-bottom: 30px;
+  margin: 0 0 12px 0;
+
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -2px;
+
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #c084fc
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Search form */
-
-.required-note {
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
-form {
-  background: white;
-  padding: 24px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-form > div {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-form label {
-  width: 120px;
-  font-weight: bold;
-}
-
-form input {
-  flex: 1;
-  padding: 10px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-form input:focus {
-  outline: none;
-  border-color: #555;
-}
-
-form button {
-  display: block;
-  margin: 20px auto 0;
-  padding: 10px 24px;
-  font-size: 15px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-form button:hover {
-  opacity: 0.8;
-}
-
-form button:disabled {
-  opacity: 0.85;
-  cursor: not-allowed;
-}
-
-form select {
-  flex: 1;
-  padding: 10px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: white;
-  box-sizing: border-box;
-}
-
-form select:focus {
-  outline: none;
-  border-color: #555;
+.app-subtitle {
+  margin: -4px 0 40px 0;
+  color: var(--text-secondary);
+  font-size: 17px;
+  font-weight: 500;
 }
 
 
-/* Month tabs */
-.month-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  overflow-x: auto;
-}
-
-.month-tab {
-  padding: 10px 16px;
-  font-size: 15px;
-  font-weight: bold;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.month-tab:hover {
-  background: #f0f0f0;
-}
-
-.month-tab.active {
-  background: #333;
-  color: white;
-  border-color: #333;
-}
-
-h2 {
-  text-align: left;
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 40px;
-  margin-bottom: 20px;
-}
-
-/* Concert cards */
-.concert-card {
-  display: flex;
-  padding: 18px 0;
-  border-bottom: 1px solid #ddd;
-  background: white;
-}
-
-.concert-artist-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-left: 20px;
-  margin-right: 12px;
-}
-
-.concert-date {
-  width: 60px;
-  flex-shrink: 0;
-  text-align: center;
-}
-
-.concert-month {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.concert-day {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.concert-details {
-  flex: 1;
-  text-align: left;
-}
-
-.concert-artist {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.concert-location {
-  margin-top: 4px;
-  font-size: 15px;
-}
-
-.concert-time {
-  margin-top: 4px;
-  font-size: 15px;
-}
-
-.concert-ticket {
-  display: inline-block;
-  margin-top: 4px;
-  font-size: 15px;
-}
-
-/* No results */
-.no-results {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 30px;
-  text-align: center;
-}
-
-.no-results h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.no-results p {
-  margin: 8px 0;
-  font-size: 15px;
-}
-
-/* Search sections */
+/* ================================
+   Search Sections
+================================ */
 
 .search-section {
   margin-bottom: 30px;
 }
 
 
-/* Search summary header */
+/* ================================
+   Search Summary Header
+================================ */
 
 .search-summary-header {
   width: 100%;
+
   display: flex;
   align-items: center;
-  box-sizing: border-box;
 
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background: var(--surface);
 
-  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 
   margin-bottom: 15px;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-
-/* Clickable portion of the header */
+.search-summary-header:hover {
+  background: var(--surface-hover);
+  border-color: #3f3f4a;
+}
 
 .search-header-main {
   flex: 1;
 
   display: flex;
   align-items: center;
+
   gap: 12px;
 
-  padding: 16px 20px;
+  padding: 18px 20px;
 
   border: none;
   background: transparent;
+
+  color: var(--text-primary);
 
   cursor: pointer;
   text-align: left;
 }
 
-
-/* Change the background only when hovering over
-   the clickable portion */
-
-.search-summary-header:hover {
-  background: #f5f5f5;
-}
-
-/* Arrow */
-
 .search-arrow {
   width: 20px;
+
   flex-shrink: 0;
 
-  font-size: 14px;
+  color: var(--accent);
+
+  font-size: 13px;
 }
-
-
-/* Search summary text */
 
 .search-summary {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
 
+  gap: 5px;
+}
 
 .search-summary strong {
   font-size: 18px;
 }
 
-
 .search-summary span {
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
+.search-row {
+  display: flex;
+  gap: 20px;
+}
 
-/* Remove X */
+.search-row > div {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.search-row label {
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.search-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ================================
+   Remove Search
+================================ */
 
 .remove-search-button {
   flex-shrink: 0;
 
   margin-right: 12px;
 
-  padding: 4px 10px;
+  padding: 5px 10px;
 
   border: none;
   background: transparent;
 
+  color: var(--text-muted);
+
   font-size: 24px;
   line-height: 1;
 
-  color: #666;
-
   cursor: pointer;
-}
 
+  transition: color 0.2s ease;
+}
 
 .remove-search-button:hover {
-  color: #000;
+  color: var(--danger);
 }
 
-/* Add search */
+
+/* ================================
+   Search Form
+================================ */
+
+form {
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  padding: 28px;
+
+  margin-bottom: 20px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.required-note {
+  margin-top: 0;
+  margin-bottom: 25px;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+}
+
+form > div {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 16px;
+}
+
+form label {
+  width: 130px;
+
+  flex-shrink: 0;
+
+  color: var(--text-primary);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+form input {
+  flex: 1;
+
+  padding: 12px 14px;
+
+  background: #0f0f14;
+
+  border: 1px solid var(--border);
+  border-radius: 5px;
+
+  color: var(--text-primary);
+
+  font-size: 15px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+form input::placeholder {
+  color: var(--text-muted);
+}
+
+form input:focus {
+  outline: none;
+
+  border-color: var(--accent);
+
+  box-shadow:
+    0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.end-date-field {
+  display: block !important;
+}
+
+.end-date-input-row {
+  display: flex;
+  align-items: center;
+}
+
+.end-date-input-row label {
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.end-date-input-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.end-date-field small {
+  display: block;
+  margin-top: 5px;
+  margin-left: 130px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* ================================
+   Search Button
+================================ */
+
+form button {
+  display: block;
+
+  margin: 25px auto 0;
+
+  padding: 12px 30px;
+
+  border: none;
+  border-radius: 5px;
+
+  background: var(--accent);
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+form button:hover {
+  background: var(--accent-hover);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 20px rgba(168, 85, 247, 0.25);
+}
+
+form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* ================================
+   Month Tabs
+================================ */
+
+.month-tabs {
+  display: flex;
+
+  gap: 8px;
+
+  margin-bottom: 25px;
+
+  overflow-x: auto;
+
+  padding-bottom: 4px;
+}
+
+.month-tab {
+  padding: 10px 16px;
+
+  flex-shrink: 0;
+
+  border: 1px solid var(--border);
+  border-radius: 5px;
+
+  background: var(--surface);
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.month-tab:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.month-tab.active {
+  background: var(--accent);
+
+  color: white;
+
+  border-color: var(--accent);
+}
+
+
+/* ================================
+   Concert Cards
+================================ */
+
+.concert-card {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 12px;
+
+  padding: 18px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.2);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.concert-card:hover {
+  background: var(--surface-hover);
+
+  border-color: #3f3f4a;
+
+  transform: translateY(-2px);
+}
+
+
+/* ================================
+   Concert Date
+================================ */
+
+.concert-date {
+  width: 65px;
+
+  flex-shrink: 0;
+
+  text-align: center;
+
+  padding-right: 15px;
+}
+
+.concert-month {
+  color: var(--accent);
+
+  font-size: 13px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+.concert-day {
+  margin-top: 3px;
+
+  color: var(--text-primary);
+
+  font-size: 28px;
+  font-weight: 800;
+}
+
+
+/* ================================
+   Artist Image
+================================ */
+
+.concert-artist-image {
+  width: 90px;
+  height: 90px;
+
+  object-fit: cover;
+
+  margin-left: 5px;
+  margin-right: 18px;
+
+  border-radius: 5px;
+
+  border: 1px solid var(--border);
+}
+
+
+/* ================================
+   Concert Details
+================================ */
+
+.concert-details {
+  flex: 1;
+
+  min-width: 0;
+
+  text-align: left;
+}
+
+.concert-artist {
+  color: var(--text-primary);
+
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.concert-location {
+  margin-top: 5px;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+}
+
+.concert-time {
+  margin-top: 5px;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+}
+
+
+/* ================================
+   Tickets
+================================ */
+
+.concert-ticket {
+  display: inline-block;
+
+  margin-top: 10px;
+
+  padding: 7px 13px;
+
+  border-radius: 6px;
+
+  background: rgba(168, 85, 247, 0.12);
+
+  color: var(--accent-hover);
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.concert-ticket:hover {
+  background: var(--accent);
+
+  color: white;
+}
+
+
+/* ================================
+   No Results
+================================ */
+
+.no-results {
+  padding: 35px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  text-align: center;
+}
+
+.no-results p {
+  margin: 8px 0;
+
+  color: var(--text-secondary);
+
+  font-size: 15px;
+}
+
+
+/* ================================
+   Add Search
+================================ */
 
 .add-search-button {
   display: inline-block;
 
-  padding: 10px 18px;
+  padding: 11px 18px;
+
   margin-top: 10px;
   margin-bottom: 30px;
 
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
 
-  background: white;
-  color: #555;
+  background: transparent;
 
-  font-size: 15px;
-  font-weight: bold;
+  color: var(--text-secondary);
+
+  font-size: 14px;
+  font-weight: 700;
 
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .add-search-button:hover {
-  background: #f5f5f5;
-  border-color: #999;
-  color: #222;
+  background: var(--surface);
+
+  color: var(--text-primary);
+
+  border-color: #3f3f4a;
+}
+
+
+/* ================================
+   Responsive
+================================ */
+
+@media (max-width: 700px) {
+  #root {
+    padding: 35px 18px;
+  }
+
+  h1 {
+    font-size: 38px;
+  }
+
+  form {
+    padding: 20px;
+  }
+
+  form > div {
+    display: block;
+  }
+
+  form label {
+    display: block;
+
+    width: auto;
+
+    margin-bottom: 7px;
+  }
+
+  form input {
+    width: 100%;
+  }
+
+  .concert-card {
+    padding: 14px;
+  }
+
+  .concert-artist-image {
+    width: 70px;
+    height: 70px;
+
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  .concert-date {
+    width: 50px;
+  }
+
+  .concert-day {
+    font-size: 23px;
+  }
+
+  .concert-artist {
+    font-size: 16px;
+  }
 }
