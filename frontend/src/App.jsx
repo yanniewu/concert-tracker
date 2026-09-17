@@ -309,159 +309,156 @@ function App() {
       );
     }
   }
+return (
+  <div>
+    <h1>Concert Tracker</h1>
+    <p className="app-subtitle">⭐️ Find your next show ⭐️</p>
 
+    {searches.map((search) => {
+      // Group this search's events by month
+      const groupedEvents = groupEventsByMonth(
+        search.events
+      );
 
-  return (
-    <div>
-      <h1>Concert Tracker</h1>
-      <p className="app-subtitle">⭐️ Find your next show ⭐️</p>
+      // Get the months for this search
+      const months = getMonthsInRange(
+        search.startDate,
+        search.endDate
+      );
 
+      return (
+        <div
+          key={search.id}
+          className={
+            search.expanded
+              ? "search-section search-card expanded"
+              : "search-section"
+          }
+        >
 
-      {searches.map((search) => {
-        // Group this search's events by month
-        const groupedEvents = groupEventsByMonth(
-          search.events
-        );
+          {/* Search form and collapsed summary */}
+          <SearchForm
+            search={search}
+            onChange={updateSearch}
+            onSearch={handleSearch}
+            onRemove={removeSearch}
+            onToggle={toggleSearch}
+          />
 
+          {/* Everything below the form collapses with it */}
+          {search.expanded && (
+            <div className="search-results-content">
 
-        // Get the months for this search
-        const months = getMonthsInRange(
-          search.startDate,
-          search.endDate
-        );
+              {/* Loading state */}
+              {search.loading && (
+  <h2 className="searching-message">Searching for concerts...</h2>
+)}
 
+              {/* Error state */}
+              {search.error && (
+                <h2>
+                  Error: {search.error}
+                </h2>
+              )}
 
-        return (
-          <div
-            key={search.id}
-            className="search-section"
-          >
+              {/* No results */}
+              {!search.loading &&
+                !search.error &&
+                search.events.length === 0 && (
+                  <div className="no-results">
+                    <p>
+                      We couldn't find any concerts
+                      matching this search.
+                    </p>
 
-            {/* Search form and collapsed summary */}
-            <SearchForm
-              search={search}
-              onChange={updateSearch}
-              onSearch={handleSearch}
-              onRemove={removeSearch}
-              onToggle={toggleSearch}
-            />
-
-
-            {/* Everything below the form collapses with it */}
-            {search.expanded && (
-              <>
-
-                {/* Loading state */}
-                {search.loading && (
-                  <h2>Searching...</h2>
+                    <p>
+                      Try changing the artist, city,
+                      radius, or date range.
+                    </p>
+                  </div>
                 )}
 
+              {/* Search results */}
+              {!search.loading &&
+                !search.error &&
+                search.events.length > 0 && (
+                  <>
 
-                {/* Error state */}
-                {search.error && (
-                  <h2>
-                    Error: {search.error}
-                  </h2>
-                )}
-
-
-                {/* No results */}
-                {!search.loading &&
-                  !search.error &&
-                  search.events.length === 0 && (
-                    <div className="no-results">
-                      <p>
-                        We couldn't find any concerts
-                        matching this search.
-                      </p>
-
-                      <p>
-                        Try changing the artist, city,
-                        radius, or date range.
-                      </p>
+                    {/* Month tabs */}
+                    <div className="month-tabs">
+                      {months.map((month) => (
+                        <button
+                          key={month}
+                          type="button"
+                          className={
+                            search.selectedMonth === month
+                              ? "month-tab active"
+                              : "month-tab"
+                          }
+                          onClick={() =>
+                            updateSearch(
+                              search.id,
+                              "selectedMonth",
+                              month
+                            )
+                          }
+                        >
+                          {formatMonth(month)}
+                        </button>
+                      ))}
                     </div>
-                  )}
 
-
-                {/* Search results */}
-                {!search.loading &&
-                  !search.error &&
-                  search.events.length > 0 && (
-                    <>
-
-                      {/* Month tabs */}
-                      <div className="month-tabs">
-                        {months.map((month) => (
-                          <button
-                            key={month}
-                            type="button"
-                            className={
-                              search.selectedMonth === month
-                                ? "month-tab active"
-                                : "month-tab"
-                            }
-                            onClick={() =>
-                              updateSearch(
-                                search.id,
-                                "selectedMonth",
-                                month
-                              )
-                            }
-                          >
-                            {formatMonth(month)}
-                          </button>
-                        ))}
-                      </div>
-
-
-                      {/* Selected month's concerts */}
-                      <section>
-                        <h2>
-                          {formatMonth(
-                            search.selectedMonth
-                          )}
-                        </h2>
-
-
-                        {groupedEvents[
+                    {/* Selected month's concerts */}
+                    <section>
+                      <h2>
+                        {formatMonth(
                           search.selectedMonth
-                        ] ? (
-                          groupedEvents[
-                            search.selectedMonth
-                          ].map((event) => (
-                            <ConcertCard
-                              key={event.event_id}
-                              event={event}
-                            />
-                          ))
-                        ) : (
-                          <div className="no-results">
-                            <p>
-                              No results for this month.
-                            </p>
-                          </div>
                         )}
-                      </section>
-                    </>
-                  )}
-              </>
-            )}
-          </div>
-        );
-      })}
+                      </h2>
+
+                      {groupedEvents[
+                        search.selectedMonth
+                      ] ? (
+                        groupedEvents[
+                          search.selectedMonth
+                        ].map((event) => (
+                          <ConcertCard
+                            key={event.event_id}
+                            event={event}
+                          />
+                        ))
+                      ) : (
+                        <div className="no-results">
+                          <p>
+                            No results for this month.
+                          </p>
+                        </div>
+                      )}
+                    </section>
+
+                  </>
+                )}
+
+            </div>
+          )}
+
+        </div>
+      );
+    })}
+
+    {/* Add another search */}
+    <button
+      type="button"
+      className="add-search-button"
+      onClick={addSearch}
+    >
+      + Add Search
+    </button>
+
+  </div>
+);
 
 
-      {/* Add another search */}
-      <button
-        type="button"
-        className="add-search-button"
-        onClick={addSearch}
-      >
-        + Add Search
-      </button>
-
-    </div>
-  );
 }
 
 export default App;

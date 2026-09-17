@@ -22,18 +22,18 @@ function ConcertCard({ event }) {
 
   return (
     <div className="concert-card">
-      {event.artist_image && (
-        <img
-          className="concert-artist-image"
-          src={event.artist_image}
-          alt={event.artist}
-        />
-      )}
+  <div className="concert-date">
+    <div className="concert-month">{month}</div>
+    <div className="concert-day">{day}</div>
+  </div>
 
-      <div className="concert-date">
-        <div className="concert-month">{month}</div>
-        <div className="concert-day">{day}</div>
-      </div>
+  {event.artist_image && (
+    <img
+      className="concert-artist-image"
+      src={event.artist_image}
+      alt={event.artist}
+    />
+  )}
 
       <div className="concert-details">
         <div className="concert-artist">

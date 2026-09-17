@@ -8,7 +8,7 @@
   --background: #0b0b0f;
   --surface: #141419;
   --surface-hover: #1b1b22;
-  --border: #292932;
+  --border: #484855;
 
   --text-primary: #f5f5f7;
   --text-secondary: #a1a1aa;
@@ -19,7 +19,7 @@
 
   --danger: #f87171;
 
-  --radius: 8px;
+  --radius: 5px;
 }
 
 * {
@@ -168,27 +168,6 @@ h1 {
   color: var(--text-secondary);
 }
 
-.search-row {
-  display: flex;
-  gap: 20px;
-}
-
-.search-row > div {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-}
-
-.search-row label {
-  width: 130px;
-  flex-shrink: 0;
-}
-
-.search-row input {
-  flex: 1;
-  min-width: 0;
-}
 
 /* ================================
    Remove Search
@@ -218,6 +197,48 @@ h1 {
   color: var(--danger);
 }
 
+/* ================================
+   Unified Expanded Search Card
+================================ */
+
+.search-card.expanded {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 30px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Header */
+.search-card.expanded .search-summary-header {
+  margin-bottom: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Divider between header and form */
+.search-card.expanded .search-form-content {
+  border-top: 1px solid var(--border);
+}
+
+/* Form */
+.search-card.expanded .search-form-content form {
+  margin-bottom: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Divider between form and results */
+.search-card.expanded .search-results-content {
+  border-top: 1px solid var(--border);
+  padding: 20px;
+}
+
 
 /* ================================
    Search Form
@@ -229,13 +250,14 @@ form {
   border: 1px solid var(--border);
   border-radius: var(--radius);
 
-  padding: 28px;
+  padding: 20px;
 
   margin-bottom: 20px;
 
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.25);
 }
+
 
 .required-note {
   margin-top: 0;
@@ -294,6 +316,32 @@ form input:focus {
 
   box-shadow:
     0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.search-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.search-row > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-row label {
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.search-row > div:not(.end-date-field) {
+  display: flex;
+  align-items: center;
+}
+
+.search-row input {
+  flex: 1;
+  min-width: 0;
 }
 
 .end-date-field {
@@ -367,6 +415,13 @@ form button:disabled {
   cursor: not-allowed;
 }
 
+.searching-message {
+  margin: 3px 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-family: "Montserrat", sans-serif
+}
+
 
 /* ================================
    Month Tabs
@@ -374,7 +429,7 @@ form button:disabled {
 
 .month-tabs {
   display: flex;
-
+  
   gap: 8px;
 
   margin-bottom: 25px;
@@ -414,9 +469,7 @@ form button:disabled {
 
 .month-tab.active {
   background: var(--accent);
-
   color: white;
-
   border-color: var(--accent);
 }
 
@@ -445,14 +498,6 @@ form button:disabled {
     transform 0.2s ease,
     background 0.2s ease,
     border-color 0.2s ease;
-}
-
-.concert-card:hover {
-  background: var(--surface-hover);
-
-  border-color: #3f3f4a;
-
-  transform: translateY(-2px);
 }
 
 
@@ -582,22 +627,9 @@ form button:disabled {
    No Results
 ================================ */
 
-.no-results {
-  padding: 35px;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-
-  text-align: center;
-}
-
 .no-results p {
-  margin: 8px 0;
-
+  margin: 3px 0;
   color: var(--text-secondary);
-
   font-size: 15px;
 }
 
@@ -634,9 +666,7 @@ form button:disabled {
 
 .add-search-button:hover {
   background: var(--surface);
-
   color: var(--text-primary);
-
   border-color: #3f3f4a;
 }
 

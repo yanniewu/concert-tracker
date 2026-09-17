@@ -7,11 +7,9 @@ function SearchForm({
 }) {
   return (
     <div>
-
       {/* Collapsed search summary */}
       {!search.expanded && (
         <div className="search-summary-header">
-
           <button
             type="button"
             className="search-header-main"
@@ -36,7 +34,6 @@ function SearchForm({
                 {search.endDate
                   ? ` – ${search.endDate}`
                   : " – 6 months"}
-
               </span>
             </span>
           </button>
@@ -49,16 +46,14 @@ function SearchForm({
           >
             ×
           </button>
-
         </div>
       )}
-
 
       {/* Expanded search form */}
       {search.expanded && (
         <>
+          {/* Search summary */}
           <div className="search-summary-header">
-
             <button
               type="button"
               className="search-header-main"
@@ -83,7 +78,6 @@ function SearchForm({
                   {search.endDate
                     ? ` – ${search.endDate}`
                     : " – 6 months"}
-
                 </span>
               </span>
             </button>
@@ -96,119 +90,121 @@ function SearchForm({
             >
               ×
             </button>
-
           </div>
 
+          {/* Form */}
+          <div className="search-form-content">
+            <form
+              onSubmit={(event) =>
+                onSearch(event, search.id)
+              }
+            >
+              <p className="required-note">
+                <strong>Required fields:</strong> Artist and Start Date.
+                All other fields are optional.
+              </p>
 
-          <form onSubmit={(event) => onSearch(event, search.id)}>
-
-            <p className="required-note">
-              <strong>Required fields:</strong> Artist and Start Date.
-              All other fields are optional.
-            </p>
-
-            <div>
-              <label>Artists *</label>
-
-              <input
-                type="text"
-                value={search.artists}
-                onChange={(event) =>
-                  onChange(
-                    search.id,
-                    "artists",
-                    event.target.value
-                  )
-                }
-                placeholder="Lorde, Ariana Grande"
-              />
-            </div>
-
-
-            <div className="search-row">
               <div>
-                <label>City</label>
+                <label>Artists *</label>
+
                 <input
                   type="text"
-                  value={search.city}
+                  value={search.artists}
                   onChange={(event) =>
                     onChange(
                       search.id,
-                      "city",
+                      "artists",
                       event.target.value
                     )
                   }
-                  placeholder="Washington, DC"
+                  placeholder="Lorde, Ariana Grande"
                 />
               </div>
 
-              <div className="radius-field">
-                <label>Radius (miles)</label>
-                <input
-                  type="number"
-                  value={search.radius}
-                  onChange={(event) =>
-                    onChange(
-                      search.id,
-                      "radius",
-                      event.target.value
-                    )
-                  }
-                  placeholder="Leave blank for city only"
-                  min="1"
-                />
-              </div>
-            </div>
+              <div className="search-row">
+                <div>
+                  <label>City</label>
 
-
-            <div className="search-row">
-              <div>
-                <label>Start Date *</label>
-                <input
-                  type="date"
-                  value={search.startDate}
-                  onChange={(event) =>
-                    onChange(
-                      search.id,
-                      "startDate",
-                      event.target.value
-                    )
-                  }
-                />
-              </div>
-
-              <div className="end-date-field">
-                <div className="end-date-input-row">
-                  <label>End Date</label>
                   <input
-                    type="date"
-                    value={search.endDate}
+                    type="text"
+                    value={search.city}
                     onChange={(event) =>
                       onChange(
                         search.id,
-                        "endDate",
+                        "city",
+                        event.target.value
+                      )
+                    }
+                    placeholder="Washington, DC"
+                  />
+                </div>
+
+                <div className="radius-field">
+                  <label>Radius (miles)</label>
+
+                  <input
+                    type="number"
+                    value={search.radius}
+                    onChange={(event) =>
+                      onChange(
+                        search.id,
+                        "radius",
+                        event.target.value
+                      )
+                    }
+                    placeholder="Leave blank for city only"
+                    min="1"
+                  />
+                </div>
+              </div>
+
+              <div className="search-row">
+                <div>
+                  <label>Start Date *</label>
+
+                  <input
+                    type="date"
+                    value={search.startDate}
+                    onChange={(event) =>
+                      onChange(
+                        search.id,
+                        "startDate",
                         event.target.value
                       )
                     }
                   />
                 </div>
 
-                <small>
-                  If blank, defaults to 6 months after the start date.
-                </small>
+                <div className="end-date-field">
+                  <div className="end-date-input-row">
+                    <label>End Date</label>
+
+                    <input
+                      type="date"
+                      value={search.endDate}
+                      onChange={(event) =>
+                        onChange(
+                          search.id,
+                          "endDate",
+                          event.target.value
+                        )
+                      }
+                    />
+                  </div>
+
+                  <small>
+                    If blank, defaults to 6 months after the start date.
+                  </small>
+                </div>
               </div>
-            </div>
 
-
-            <button type="submit">
-              Search
-            </button>
-
-          </form>
-
+              <button type="submit">
+                Search
+              </button>
+            </form>
+          </div>
         </>
       )}
-
     </div>
   );
 }
