@@ -14,39 +14,54 @@ function formatTime(time) {
 function ConcertCard({ event }) {
   const date = new Date(`${event.date}T00:00:00`);
 
-  const month = date.toLocaleDateString("en-US", {
-    month: "short",
-  });
+  const month = date.toLocaleDateString("en-US", { month: "short", }).toUpperCase();
 
   const day = date.getDate().toString().padStart(2, "0");
 
   return (
-    <div className="concert-card">
-  <div className="concert-date">
-    <div className="concert-month">{month}</div>
-    <div className="concert-day">{day}</div>
-  </div>
+    <article className="concert-card">
 
-  {event.artist_image && (
-    <img
-      className="concert-artist-image"
-      src={event.artist_image}
-      alt={event.artist}
-    />
-  )}
+      <div className="concert-date">
+        <div className="concert-month">
+          {month}
+        </div>
+
+        <div className="concert-day">
+          {day}
+        </div>
+
+        <div className="concert-year">
+          {date.getFullYear()}
+        </div>
+      </div>
+
+      {event.artist_image && (
+        <img
+          className="concert-artist-image"
+          src={event.artist_image}
+          alt={event.artist}
+        />
+      )}
 
       <div className="concert-details">
         <div className="concert-artist">
           {event.artist}
         </div>
 
-        <div className="concert-location">
-          {event.location} | {event.venue}
+        <div className="concert-event-name">
+          {event.event_name}
         </div>
 
-        <div className="concert-time">
-          {formatTime(event.time)}
+        <div className="concert-location">
+          {event.venue}
+          {event.location && ` · ${event.location}`}
         </div>
+
+        {event.time && (
+          <div className="concert-time">
+            {formatTime(event.time)}
+          </div>
+        )}
       </div>
 
       <a
@@ -55,9 +70,10 @@ function ConcertCard({ event }) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Tickets →
+        <span> Get Tickets</span>
+        <span className="ticket-arrow">→</span>
       </a>
-    </div>
+    </article>
   );
 }
 

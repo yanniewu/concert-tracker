@@ -46,6 +46,6 @@ def search_events(search: SearchRequest):
         for event in events:
             all_events[event["event_id"]] = event
 
-        time.sleep(2)
+        time.sleep(1)
 
     return list(all_events.values())
