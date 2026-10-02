@@ -7,7 +7,6 @@
 
   --purple: #a855f7;
   --purple-bright: #b426e4;
-  --pink: #f472d0;
 
   --text: #f5f3ff;
   --text-secondary: #aaa7c8;
@@ -106,7 +105,7 @@ body {
 }
 
 /* ================================
-   Page Header
+   PAGE HEADER
 ================================ */
 
 .hero {
@@ -184,11 +183,39 @@ body {
 }
 
 .search-location {
-  flex: 1.15;
+  flex: 1.3;
+}
+
+.radius-select {
+  flex-shrink: 0;
+  width: 68px;
+  margin-left: 8px;
+  padding: 3px 2px;
+
+  border: 1px solid var(--border);
+  border-radius: 3px;
+
+  background: var(--surface);
+  color: var(--text-secondary);
+
+  font-family: var(--body-font);
+  font-size: 17px;
+
+  outline: none;
+  cursor: pointer;
+}
+
+.radius-select:focus {
+  border-color: var(--purple);
+}
+
+.radius-select option {
+  background: var(--surface);
+  color: var(--text);
 }
 
 .search-date {
-  flex: 0.75;
+  flex: 0.68;
 }
 
 .search-icon {
@@ -263,32 +290,82 @@ body {
   background: var(--border);
 }
 
-.search-button {
+/* ========================================
+   Remove Search
+======================================== */
+
+.search-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.search-row .search-bar {
+  flex: 1;
+  min-width: 0;
+}
+
+.remove-search {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  
 
-  width: 135px;
-  height: 35px;
+  width: 24px;
+  height: 24px;
+
   flex-shrink: 0;
-
-  margin-left: 20px;
-  margin-right: 5px;
+  padding: 0;
 
   border: none;
-  border-radius: 3px;
+  border-radius: 50%;
 
-  background:var(--purple);
-
+  background: var(--purple);
   color: #17051f;
 
-  font-family: var(--pixel-font);
-  font-size: 10px;
-  letter-spacing: -0.5px;
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+  font-weight: bold;
+  line-height: 1;
 
-  text-decoration: none;
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.remove-search:hover {
+  background: var(--purple-bright);
+  color: var(--text-primary);
+  transform: scale(1.03);
+}
+
+.remove-search:active {
+  transform: scale(0.95);
+}
+
+
+/* ================================
+   Add Search
+================================ */
+
+.add-search-button {
+  display: inline-block;
+
+  padding: 11px 18px;
+
+  margin: 14px auto 8px;
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+  color: var(--purple);
+  font-family: var(--pixel-font);
+  font-size: 9px;
+
   cursor: pointer;
 
   transition:
@@ -297,174 +374,128 @@ body {
     border-color 0.2s ease;
 }
 
-.search-button-arrow {
-  font-family: sans-serif;
-
-  font-size: 18px;
-  font-weight: bold;
-
-  line-height: 1;
-}
-
-.search-button:hover {
-  background: var(--purple-bright);
-  color: var(--text-primary);
-}
-
-
-
-/* ================================
-   Search Sections
-================================ */
-
-.search-section {
-  margin-bottom: 30px;
-}
-
-
-/* ================================
-   Search Summary Header
-================================ */
-/* 
-.search-summary-header {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
+.add-search-button:hover {
   background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-
-  margin-bottom: 15px;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.search-summary-header:hover {
+  color: var(--text-primary);
   border-color: #3f3f4a;
 }
 
-.search-header-main {
-  flex: 1;
 
+/* ================================
+   Search All
+================================ */
+
+.search-all-button {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 3px;
 
-  gap: 12px;
-
-  padding: 18px 20px;
+  width: 145px;
+  height: 35px;
+  margin: 20px auto 35px;
 
   border: none;
-  background: transparent;
+  border-radius: 3px;
 
-  color: var(--text-primary);
+  background: var(--purple);
+  color: #17051f;
+  font-family: var(--pixel-font);
+  font-size: 8px;
 
   cursor: pointer;
-  text-align: left;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.search-arrow {
-  width: 20px;
-
-  flex-shrink: 0;
-
-  color: var(--accent);
-
-  font-size: 13px;
+.search-all-button-arrow {
+  font-family: sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 1;
 }
 
-.search-summary {
-  display: flex;
-  flex-direction: column;
-
-  gap: 5px;
+.search-all-button:hover {
+  background: var(--purple-bright);
+  color: var(--text-primary);
+  transform: scale(1.02);
 }
 
-.search-summary strong {
+.search-all-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.search-container {
+  margin-bottom: 10px;
+}
+
+.search-error {
+  margin: 6px 0 12px;
+  color: var(--danger);
+  font-family: var(--body-font);
   font-size: 18px;
 }
 
-.search-summary span {
-  font-size: 14px;
-  color: var(--text-secondary);
-} */
-
-
 /* ================================
-   Remove Search
+  Results Header
 ================================ */
 
-.remove-search-button {
-  flex-shrink: 0;
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
 
-  margin-right: 12px;
-
-  padding: 5px 10px;
-
-  border: none;
-  background: transparent;
-
-  color: var(--text-muted);
-
-  font-size: 24px;
+.results-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
   line-height: 1;
 
-  cursor: pointer;
+  color: var(--text-primary);
+  font-family: var(--pixel-font);
+  font-size: 12px;
 
-  transition: color 0.2s ease;
 }
 
-.remove-search-button:hover {
-  color: var(--danger);
+.ticket-icon {
+  display: block;
+  margin-right: 5px;
+  width: 32px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--purple-bright);
+  transform: rotate(-40deg);
+  image-rendering: pixelated;
 }
 
-/* ================================
-   Unified Expanded Search Card
-================================ */
-
-.search-card.expanded {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 30px;
-  overflow: hidden;
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.25);
+.results-count {
+  color: var(--purple-bright);
+  font-family: var(--body-font);
+  font-size: 18px;
 }
 
-/* Header */
-.search-card.expanded .search-summary-header {
-  margin-bottom: 0;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
+.search-results-divider {
+  width: 100%;
+  height: 1px;
+  margin: 0 0 5px;
+  background: var(--border);
+
 }
 
-/* Divider between header and form */
-.search-card.expanded .search-form-content {
-  border-top: 1px solid var(--border);
+.initial-message {
+  margin-top: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: var(--text-primary);
+  font-size: 18x;
 }
-
-/* Form */
-.search-card.expanded .search-form-content form {
-  margin-bottom: 0;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-/* Divider between form and results */
-.search-card.expanded .search-results-content {
-  border-top: 1px solid var(--border);
-  padding: 20px;
-}
-
 
 
 /* ================================
@@ -673,6 +704,7 @@ body {
 .concert-ticket:hover {
   background: var(--purple-bright);
   color: var(--text-primary);
+  transform: scale(1.02);
 }
 
 
@@ -687,6 +719,14 @@ body {
 /* ================================
    Searching Message
 ================================ */
+.searching-message {
+  color: var(--text-secondary);
+  font-family: var(--text-primary);
+  font-size: 18px;
+  text-align: center;
+  margin-top: 40px;
+}
+
 .searching-message::after {
   content: "";
   animation: dots 2s steps(4, end) infinite;
@@ -707,51 +747,17 @@ body {
     content: "...";
   }
 }
+
+
+
 /* ================================
    No Results
 ================================ */
 
 .no-results p {
-  margin: 3px 0;
+  margin: 30px;
   color: var(--text-secondary);
   font-size: 18px;
-}
-
-
-/* ================================
-   Add Search
-================================ */
-
-.add-search-button {
-  display: inline-block;
-
-  padding: 11px 18px;
-
-  margin-top: 10px;
-  margin-bottom: 30px;
-
-  border: 1px solid var(--border);
-  border-radius: 5px;
-
-  background: transparent;
-
-  color: var(--text-secondary);
-
-  font-size: 14px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.add-search-button:hover {
-  background: var(--surface);
-  color: var(--text-primary);
-  border-color: #3f3f4a;
 }
 
 
@@ -833,5 +839,10 @@ body {
     min-height: 50px;
 
     margin-top: 8px;
+  }
+  .remove-search {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
   }
 }

@@ -106,81 +106,127 @@ function CalendarIcon() {
 function SearchForm({
   search,
   onChange,
-  onSearch,
+  onRemove,
 }) {
   return (
-    <form
-      className="search-bar"
-      onSubmit={(event) =>
-        onSearch(event, search.id)
+    <div className="search-row">
+
+      <div className="search-bar">
+
+        {/* Artists */}
+        <div className="search-field search-artists">
+          <SearchIcon />
+
+          <input
+            type="text"
+            value={search.artists}
+            onChange={(event) =>
+              onChange(
+                search.id,
+                "artists",
+                event.target.value
+              )
+            }
+            placeholder="Search artists..."
+          />
+        </div>
+
+        <div className="search-divider" />
+
+        {/* Location */}
+<div className="search-field search-location">
+  <LocationIcon />
+
+  <input
+    type="text"
+    value={search.city}
+    onChange={(event) => {
+  const city = event.target.value;
+
+  onChange(search.id, "city", city);
+
+  if (city.trim() === "") {
+    onChange(search.id, "radius", "");
+  }
+}}
+    placeholder="Any city"
+  />
+
+  {search.city.trim() !== "" && (
+    <select
+      className="radius-select"
+      value={search.radius}
+      onChange={(event) =>
+        onChange(
+          search.id,
+          "radius",
+          event.target.value
+        )
       }
     >
-      {/* Artists */}
-      <div className="search-field search-artists">
-        <SearchIcon />
+      <option value="">Radius</option>
+      <option value="5">5 mi</option>
+      <option value="10">10 mi</option>
+      <option value="25">25 mi</option>
+      <option value="50">50 mi</option>
+      <option value="100">100 mi</option>
+    </select>
+  )}
+</div>
 
-        <input
-          type="text"
-          value={search.artists}
-          onChange={(event) =>
-            onChange(
-              search.id,
-              "artists",
-              event.target.value
-            )
-          }
-          placeholder="Search artists..."
-        />
+        <div className="search-divider" />
+
+        {/* Start Date */}
+<div className="search-field search-date">
+  <CalendarIcon />
+
+  <input
+    type="date"
+    value={search.startDate}
+    onChange={(event) =>
+      onChange(
+        search.id,
+        "startDate",
+        event.target.value
+      )
+    }
+  />
+</div>
+
+<div className="search-divider" />
+
+{/* End Date */}
+<div className="search-field search-date">
+  <CalendarIcon />
+
+  <input
+    type="date"
+    value={search.endDate}
+    onChange={(event) =>
+      onChange(
+        search.id,
+        "endDate",
+        event.target.value
+      )
+    }
+  />
+</div>
+
       </div>
 
-      <div className="search-divider" />
+      {/* Remove search */}
+      {onRemove && (
+        <button
+  type="button"
+  className="remove-search"
+  onClick={() => onRemove(search.id)}
+  aria-label="Remove search"
+>
+  ×
+</button>
+      )}
 
-      {/* Location */}
-      <div className="search-field search-location">
-        <LocationIcon />
-
-        <input
-          type="text"
-          value={search.city}
-          onChange={(event) =>
-            onChange(
-              search.id,
-              "city",
-              event.target.value
-            )
-          }
-          placeholder="Any location"
-        />
-      </div>
-
-      <div className="search-divider" />
-
-      {/* Date */}
-      <div className="search-field search-date">
-        <CalendarIcon />
-
-        <input
-          type="date"
-          value={search.startDate}
-          onChange={(event) =>
-            onChange(
-              search.id,
-              "startDate",
-              event.target.value
-            )
-          }
-        />
-      </div>
-
-      {/* Search button */}
-      <button
-        type="submit"
-        className="search-button"
-      >
-          <span>Search</span>
-          <span className="search-button-arrow">→</span>
-      </button>
-    </form>
+    </div>
   );
 }
 

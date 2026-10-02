@@ -3,7 +3,7 @@ import ConcertCard from "./components/ConcertCard";
 import SearchForm from "./components/SearchForm";
 import "./App.css";
 
-// Sorts events chronologically
+// Sort events chronologically
 function sortEvents(events) {
   return [...events].sort((a, b) => {
     const dateA = `${a.date}T${a.time || "00:00:00"}`;
@@ -38,7 +38,7 @@ function formatMonth(month) {
   });
 }
 
-// Get today's date in proper format
+// Get today's date
 function getToday() {
   const today = new Date();
 
@@ -74,73 +74,53 @@ function getMonthsInRange(startDate, endDate) {
   return months;
 }
 
+// Create a new search
+function createSearch() {
+  return {
+    id: Date.now() + Math.random(),
+    artists: "",
+    city: "",
+    radius: "",
+    startDate: getToday(),
+    endDate: "",
+    events: [],
+    loading: false,
+    error: null,
+  };
+}
 
 function App() {
-  // Search form state
   const [searches, setSearches] = useState([
-    {
-      id: 1,
-      artists: "",
-      city: "",
-      radius: "",
-      startDate: getToday(),
-      endDate: "",
-      events: [],
-      loading: false,
-      error: null,
-      selectedMonth: null,
-      expanded: true,
-    },
+    createSearch(),
   ]);
 
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [submittedSearches, setSubmittedSearches] = useState([]);
 
   // Update one field in one search
   function updateSearch(searchId, field, value) {
     setSearches((currentSearches) =>
       currentSearches.map((search) =>
         search.id === searchId
-          ? { ...search, [field]: value }
-          : search
-      )
-    );
-  }
-
-
-  // Expand or collapse one search
-  function toggleSearch(searchId) {
-    setSearches((currentSearches) =>
-      currentSearches.map((search) =>
-        search.id === searchId
           ? {
             ...search,
-            expanded: !search.expanded,
+            [field]: value,
           }
           : search
       )
     );
   }
 
-
-  // Add a new search
+  // Add another search
   function addSearch() {
     setSearches((currentSearches) => [
       ...currentSearches,
-      {
-        id: Date.now(),
-        artists: "",
-        city: "",
-        radius: "",
-        startDate: getToday(),
-        endDate: "",
-        events: [],
-        loading: false,
-        error: null,
-        selectedMonth: null,
-        expanded: true,
-      },
+      createSearch(),
     ]);
   }
-
 
   // Remove a search
   function removeSearch(searchId) {
@@ -151,85 +131,58 @@ function App() {
     );
   }
 
+  // Ticket icon
+  function TicketIcon() {
+    return (
+      <svg
+        viewBox="0 0 32 20"
+        aria-hidden="true"
+        className="ticket-icon"
+      >
+        {/* Pixel/blocky ticket */}
+        <path
+          d="
+          M2 2
+          H30
+          V6
+          H28
+          V8
+          H30
+          V18
+          H2
+          V14
+          H4
+          V12
+          H2
+          Z
+        "
+          fill="currentColor"
+        />
 
-  // Search Ticketmaster
-  async function handleSearch(event, searchId) {
-    event.preventDefault();
-
-    const search = searches.find(
-      (search) => search.id === searchId
+        {/* Perforation line */}
+        <path
+          d="M22 3 V5 M22 7 V9 M22 11 V13 M22 15 V17"
+          stroke="var(--bg)"
+          strokeWidth="1.5"
+        />
+      </svg>
     );
+  }
 
-    if (!search) {
-      return;
-    }
-
-
-    // Turn the artist input into a list of artist names
+  // Search Ticketmaster for one search
+  async function searchConcerts(search) {
     const artistList = search.artists
       .split(",")
       .map((artist) => artist.trim())
       .filter((artist) => artist !== "");
 
-
-    // Artist is required
-    if (artistList.length === 0) {
-      updateSearch(
-        searchId,
-        "error",
-        "Please enter at least one artist."
-      );
-
-      return;
-    }
-
-
-    // End date must be after start date
-    if (
-      search.endDate &&
-      search.endDate <= search.startDate
-    ) {
-      updateSearch(
-        searchId,
-        "error",
-        "End date must be after start date."
-      );
-
-      return;
-    }
-
-    // Radius requires a city
-    if (search.radius && !search.city) {
-      updateSearch(
-        searchId,
-        "error",
-        "A city must be provided when using radius."
-      );
-
-      return;
-    }
-
-    // Clear previous results and errors for this search
-    setSearches((currentSearches) =>
-      currentSearches.map((currentSearch) =>
-        currentSearch.id === searchId
-          ? {
-            ...currentSearch,
-            loading: true,
-            error: null,
-            events: [],
-          }
-          : currentSearch
-      )
-    );
-
-    // Build the request that FastAPI expects
+    // Build the request
     const searchRequest = {
       artists: artistList,
 
       city: search.city || null,
 
-      radius: search.radius
+      radius: search.city && search.radius
         ? Number(search.radius)
         : null,
 
@@ -242,72 +195,204 @@ function App() {
         : null,
     };
 
+    const API_URL = import.meta.env.VITE_API_URL;
 
-    try {
-      const API_URL = import.meta.env.VITE_API_URL;
+    const response = await fetch(
+      `${API_URL}/api/events/search`,
+      {
+        method: "POST",
 
-      const response = await fetch(
-        `${API_URL}/api/events/search`,
-        {
-          method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify(searchRequest),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          "Failed to search for concerts"
-        );
+        body: JSON.stringify(searchRequest),
       }
+    );
 
-      const data = await response.json();
-
-      // Sort events chronologically
-      const sortedEvents = sortEvents(data);
-
-
-      // Determine which months should appear as tabs
-      const months = getMonthsInRange(
-        search.startDate,
-        search.endDate
-      );
-
-      // Save results only to this search
-      setSearches((currentSearches) =>
-        currentSearches.map((currentSearch) =>
-          currentSearch.id === searchId
-            ? {
-              ...currentSearch,
-              events: sortedEvents,
-              loading: false,
-              error: null,
-              selectedMonth: months[0] || null,
-            }
-            : currentSearch
-        )
-      );
-    } catch (error) {
-      setSearches((currentSearches) =>
-        currentSearches.map((currentSearch) =>
-          currentSearch.id === searchId
-            ? {
-              ...currentSearch,
-              loading: false,
-              error: error.message,
-            }
-            : currentSearch
-        )
+    if (!response.ok) {
+      throw new Error(
+        "Failed to search for concerts"
       );
     }
+
+    const data = await response.json();
+
+    return sortEvents(data);
   }
+
+  // Search all search bars
+  async function handleSearchAll() {
+    setSearchError(null);
+
+    // Only search rows that have an artist
+    const activeSearches = searches.filter(
+      (search) => search.artists.trim() !== ""
+    );
+
+    if (activeSearches.length === 0) {
+      setSearchError(
+        "Please enter at least one artist."
+      );
+
+      return;
+    }
+
+    setSubmittedSearches(activeSearches);
+    setHasSearched(true);
+
+    // Validate every search before making requests
+    for (const search of activeSearches) {
+      if (
+        search.endDate &&
+        search.endDate <= search.startDate
+      ) {
+        updateSearch(
+          search.id,
+          "error",
+          "End date must be after start date."
+        );
+
+        return;
+      }
+
+      if (search.radius && !search.city) {
+        updateSearch(
+          search.id,
+          "error",
+          "A city must be provided when using radius."
+        );
+
+        return;
+      }
+    }
+
+    // Clear previous errors
+    setSearches((currentSearches) =>
+      currentSearches.map((search) => ({
+        ...search,
+        error: null,
+        events: [],
+        loading: activeSearches.some(
+          (activeSearch) =>
+            activeSearch.id === search.id
+        ),
+      }))
+    );
+
+    setSearching(true);
+
+    try {
+      // Run all searches at the same time
+      const results = await Promise.all(
+        activeSearches.map(async (search) => {
+          try {
+            const events = await searchConcerts(search);
+
+            return {
+              searchId: search.id,
+              events,
+              error: null,
+            };
+          } catch (error) {
+            return {
+              searchId: search.id,
+              events: [],
+              error: error.message,
+            };
+          }
+        })
+      );
+
+      // Save each search's results
+      setSearches((currentSearches) =>
+        currentSearches.map((search) => {
+          const result = results.find(
+            (item) => item.searchId === search.id
+          );
+
+          if (!result) {
+            return {
+              ...search,
+              loading: false,
+            };
+          }
+
+          return {
+            ...search,
+            events: result.events,
+            loading: false,
+            error: result.error,
+          };
+        })
+      );
+
+      // Get every event from every search
+      const allEvents = results.flatMap(
+        (result) => result.events
+      );
+
+      // Sort everything together
+      const sortedEvents = sortEvents(allEvents);
+
+      // Determine available months
+      if (activeSearches.length > 0) {
+        const months = [
+          ...new Set(
+            activeSearches.flatMap((search) =>
+              getMonthsInRange(
+                search.startDate,
+                search.endDate
+              )
+            )
+          ),
+        ].sort();
+
+        setSelectedMonth(months[0] || null);
+      } else {
+        setSelectedMonth(null);
+      }
+    } finally {
+      setSearching(false);
+    }
+  }
+
+  // Combine every search's events
+  const allEvents = sortEvents(
+    searches.flatMap((search) => search.events)
+  );
+
+  // Group combined events by month
+  const groupedEvents =
+    groupEventsByMonth(allEvents);
+
+  // Get months that actually contain results
+  const resultMonths = [
+    ...new Set(
+      submittedSearches
+        .filter(
+          (search) =>
+            search.artists.trim() !== "" &&
+            search.startDate
+        )
+        .flatMap((search) =>
+          getMonthsInRange(
+            search.startDate,
+            search.endDate
+          )
+        )
+    ),
+  ].sort();
+
+  const displayedEvents =
+    selectedMonth && groupedEvents[selectedMonth]
+      ? groupedEvents[selectedMonth]
+      : [];
+
   return (
     <div className="app">
 
+      {/* Navigation */}
       <header className="top-nav">
         <div className="logo">
           ♪ CONCERT TRACKER
@@ -326,6 +411,7 @@ function App() {
 
       <main>
 
+        {/* Hero */}
         <section className="hero">
           <div className="hero-content">
             <h1>
@@ -342,139 +428,34 @@ function App() {
           </div>
         </section>
 
-        {searches.map((search) => {
-          // Group this search's events by month
-          const groupedEvents = groupEventsByMonth(
-            search.events
-          );
+        {/* Search bars */}
+        <section className="searches">
 
-          // Get the months for this search
-          const months = getMonthsInRange(
-            search.startDate,
-            search.endDate
-          );
-
-          return (
+          {searches.map((search) => (
             <div
               key={search.id}
-              className={
-                search.expanded
-                  ? "search-section search-card expanded"
-                  : "search-section"
-              }
+              className="search-container"
             >
-
-              {/* Search form and collapsed summary */}
               <SearchForm
                 search={search}
                 onChange={updateSearch}
-                onSearch={handleSearch}
-                onRemove={removeSearch}
-                onToggle={toggleSearch}
+                onRemove={
+                  searches.length > 1
+                    ? removeSearch
+                    : null
+                }
               />
 
-              {/* Everything below the form collapses with it */}
-              {search.expanded && (
-                <div className="search-results-content">
-
-                  {/* Loading state */}
-                  {search.loading && (
-                    <div className="searching-message">
-                      Searching
-                    </div>
-                  )}
-
-                  {/* Error state */}
-                  {search.error && (
-                    <h2>
-                      Error: {search.error}
-                    </h2>
-                  )}
-
-                  {/* No results */}
-                  {!search.loading &&
-                    !search.error &&
-                    search.events.length === 0 && (
-                      <div className="no-results">
-                        <p>
-                          We couldn't find any concerts
-                          matching this search.
-                        </p>
-
-                        <p>
-                          Try changing the artist, city,
-                          radius, or date range.
-                        </p>
-                      </div>
-                    )}
-
-                  {/* Search results */}
-                  {!search.loading &&
-                    !search.error &&
-                    search.events.length > 0 && (
-                      <>
-
-                        {/* Month tabs */}
-                        <div className="month-tabs">
-                          {months.map((month) => (
-                            <button
-                              key={month}
-                              type="button"
-                              className={
-                                search.selectedMonth === month
-                                  ? "month-tab active"
-                                  : "month-tab"
-                              }
-                              onClick={() =>
-                                updateSearch(
-                                  search.id,
-                                  "selectedMonth",
-                                  month
-                                )
-                              }
-                            >
-                              {formatMonth(month)}
-                            </button>
-                          ))}
-                        </div>
-
-                        {/* Selected month's concerts */}
-                        <section>
-                          <h2>
-                            {formatMonth(
-                              search.selectedMonth
-                            )}
-                          </h2>
-
-                          {groupedEvents[
-                            search.selectedMonth
-                          ] ? (
-                            groupedEvents[
-                              search.selectedMonth
-                            ].map((event) => (
-                              <ConcertCard
-                                key={event.event_id}
-                                event={event}
-                              />
-                            ))
-                          ) : (
-                            <div className="no-results">
-                              <p>
-                                No results for this month.
-                              </p>
-                            </div>
-                          )}
-                        </section>
-
-                      </>
-                    )}
-
+              {/* Individual search error */}
+              {search.error && (
+                <div className="search-error">
+                  {search.error}
                 </div>
               )}
-
             </div>
-          );
-        })}
+          ))}
+
+        </section>
 
         {/* Add another search */}
         <button
@@ -482,14 +463,137 @@ function App() {
           className="add-search-button"
           onClick={addSearch}
         >
-          + Add Search
+          + ADD SEARCH
         </button>
+
+        {/* Search all */}
+        <button
+          type="button"
+          className="search-all-button"
+          onClick={handleSearchAll}
+          disabled={searching}
+        >
+          {searching
+            ? "SEARCHING..."
+            : "SEARCH ALL"}
+
+          {!searching && (
+            <span className="search-all-button-arrow">
+              →
+            </span>
+          )}
+        </button>
+
+        <div className="results-header">
+          <span className="results-header-title"><TicketIcon />
+            Upcoming Concerts</span>
+
+          <span className="results-count">
+            {allEvents.length}{" "}
+            {allEvents.length == 1 ? "result" : "results"}
+          </span>
+        </div>
+
+        <div className="search-results-divider" />
+
+        {/* Start screen when there is no search */}
+        {!hasSearched && !searching && (
+          <div className="initial-message">
+            Find your next concert!
+          </div>
+        )}
+        {/* General search error */}
+        {searchError && (
+          <div className="search-error">
+            {searchError}
+          </div>
+        )}
+
+        {/* Loading */}
+        {searching && (
+          <div className="searching-message">
+            Searching
+          </div>
+        )}
+
+        {/* Combined results */}
+        {!searching && allEvents.length > 0 && (
+          <section className="combined-results">
+
+            <h2>ALL CONCERTS</h2>
+
+            {/* Month tabs */}
+            <div className="month-tabs">
+              {resultMonths.map((month) => (
+                <button
+                  key={month}
+                  type="button"
+                  className={
+                    selectedMonth === month
+                      ? "month-tab active"
+                      : "month-tab"
+                  }
+                  onClick={() =>
+                    setSelectedMonth(month)
+                  }
+                >
+                  {formatMonth(month)}
+                </button>
+              ))}
+            </div>
+
+            {/* Selected month */}
+            {selectedMonth && (
+              <section>
+                <h2>
+                  {formatMonth(selectedMonth)}
+                </h2>
+
+                {displayedEvents.length > 0 ? (
+                  displayedEvents.map(
+                    (event, index) => (
+                      <ConcertCard
+                        key={`${event.event_id}-${index}`}
+                        event={event}
+                      />
+                    )
+                  )
+                ) : (
+                  <div className="no-results">
+                    <p>
+                      No results for this month.
+                    </p>
+                  </div>
+                )}
+              </section>
+            )}
+
+          </section>
+        )}
+
+        {/* No results */}
+        {hasSearched &&
+          !searching &&
+          !searchError &&
+          allEvents.length === 0 &&
+          searches.some(
+            (search) =>
+              search.artists.trim() !== ""
+          ) && (
+            <div className="no-results">
+              <p>
+                We couldn't find any concerts
+                matching your searches.
+                <br />
+                Try changing the artist, city,
+                radius, or date range.
+              </p>
+            </div>
+          )}
+
       </main>
     </div>
   );
-
-
-
 }
 
 export default App;
