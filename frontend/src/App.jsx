@@ -2,6 +2,7 @@ import { useState } from "react";
 import ConcertCard from "./components/ConcertCard";
 import SearchForm from "./components/SearchForm";
 import "./App.css";
+import MyArtists from "./components/MyArtists";
 
 // Sort events chronologically
 function sortEvents(events) {
@@ -89,6 +90,7 @@ function createSearch() {
   };
 }
 
+
 function App() {
   const [searches, setSearches] = useState([
     createSearch(),
@@ -99,6 +101,7 @@ function App() {
   const [searchError, setSearchError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [submittedSearches, setSubmittedSearches] = useState([]);
+  const [page, setPage] = useState(window.location.pathname === "/my-artists" ? "my-artists" : "home");
 
   // Update one field in one search
   function updateSearch(searchId, field, value) {
@@ -130,6 +133,18 @@ function App() {
       )
     );
   }
+
+  // Navigation for home and artists page
+function navigateTo(newPage) {
+  const path =
+    newPage === "my-artists"
+      ? "/my-artists"
+      : "/";
+
+  window.history.pushState({}, "", path);
+
+  setPage(newPage);
+};
 
   // Ticket icon
   function TicketIcon() {
@@ -390,7 +405,7 @@ function App() {
       : [];
 
   return (
-    <div className="app">
+    <div className={`app ${page === "my-artists" ? "artists-page" : ""}`}>
 
       {/* Navigation */}
       <header className="top-nav">
@@ -399,15 +414,28 @@ function App() {
         </div>
 
         <nav>
-          <button type="button">
-            HOME
-          </button>
+  <button
+    type="button"
+    onClick={() => navigateTo("home")}
+  >
+    HOME
+  </button>
 
-          <button type="button">
-            MY ARTISTS
-          </button>
-        </nav>
+  <button
+    type="button"
+    onClick={() => navigateTo("my-artists")}
+  >
+    MY ARTISTS
+  </button>
+</nav>
       </header>
+
+
+    {page === "my-artists" ? (
+      <MyArtists />
+    ) : (
+   
+
 
       <main>
 
@@ -592,6 +620,7 @@ function App() {
           )}
 
       </main>
+        )}
     </div>
   );
 }
