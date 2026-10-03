@@ -3,23 +3,23 @@ import { useEffect, useState } from "react";
 const STORAGE_KEY = "concert-tracker-my-artists";
 
 function MyArtists() {
-  const [artists, setArtists] = useState([]);
   const [artistInput, setArtistInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [artists, setArtists] = useState(() => {
+  const savedArtists = localStorage.getItem(STORAGE_KEY);
 
-  // Load saved artists when the page opens
-  useEffect(() => {
-    const savedArtists = localStorage.getItem(STORAGE_KEY);
+  if (!savedArtists) {
+    return [];
+  }
 
-    if (savedArtists) {
-      try {
-        setArtists(JSON.parse(savedArtists));
-      } catch {
-        localStorage.removeItem(STORAGE_KEY);
-      }
-    }
-  }, []);
+  try {
+    return JSON.parse(savedArtists);
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+    return [];
+  }
+});
 
   // Save artists whenever the list changes
   useEffect(() => {
@@ -113,8 +113,7 @@ function MyArtists() {
     <main className="my-artists-page">
 
       <section className="my-artists-header">
-          Add your favorite artists to keep track
-           of their upcoming concerts.
+          Save your favorite artists to quickly search for their concerts.
       </section>
 
       {/* Add artists */}
