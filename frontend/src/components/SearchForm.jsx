@@ -1,3 +1,5 @@
+import { useState, useRef, useEffect } from "react";
+
 function SearchIcon() {
   return (
     <svg
@@ -103,11 +105,98 @@ function CalendarIcon() {
   );
 }
 
+function formatDate(date) {
+  if (!date) {
+    return "";
+  }
+
+  const [year, month, day] = date.split("-");
+
+  return new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day)
+  ).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 function SearchForm({
   search,
   onChange,
   onRemove,
 }) {
+  const [datePickerOpen, setDatePickerOpen] =
+    useState(false);
+
+  const datePickerRef = useRef(null);
+
+  // Close date picker when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        datePickerRef.current &&
+        !datePickerRef.current.contains(event.target)
+      ) {
+        setDatePickerOpen(false);
+      }
+    }
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
+
+  function handleStartDateChange(event) {
+    const startDate = event.target.value;
+
+    onChange(
+      search.id,
+      "startDate",
+      startDate
+    );
+
+    // Clear end date if it is no longer valid
+    if (
+      search.endDate &&
+      startDate &&
+      search.endDate <= startDate
+    ) {
+      onChange(
+        search.id,
+        "endDate",
+        ""
+      );
+    }
+  }
+
+  function handleEndDateChange(event) {
+    onChange(
+      search.id,
+      "endDate",
+      event.target.value
+    );
+  }
+
+  const dateText =
+    search.startDate && search.endDate
+      ? `${formatDate(search.startDate)} → ${formatDate(
+          search.endDate
+        )}`
+      : search.startDate
+        ? `${formatDate(search.startDate)} → End date`
+        : "Select dates";
+
   return (
     <div className="search-row">
 
@@ -134,96 +223,151 @@ function SearchForm({
         <div className="search-divider" />
 
         {/* Location */}
-<div className="search-field search-location">
-  <LocationIcon />
+        <div className="search-field search-location">
+          <LocationIcon />
 
-  <input
-    type="text"
-    value={search.city}
-    onChange={(event) => {
-  const city = event.target.value;
+          <input
+            type="text"
+            value={search.city}
+            onChange={(event) => {
+              const city = event.target.value;
 
-  onChange(search.id, "city", city);
+              onChange(
+                search.id,
+                "city",
+                city
+              );
 
-  if (city.trim() === "") {
-    onChange(search.id, "radius", "");
-  }
-}}
-    placeholder="Any city"
-  />
+              if (city.trim() === "") {
+                onChange(
+                  search.id,
+                  "radius",
+                  ""
+                );
+              }
+            }}
+            placeholder="Any city"
+          />
 
-  {search.city.trim() !== "" && (
-    <select
-      className="radius-select"
-      value={search.radius}
-      onChange={(event) =>
-        onChange(
-          search.id,
-          "radius",
-          event.target.value
-        )
-      }
-    >
-      <option value="">Radius</option>
-      <option value="5">5 mi</option>
-      <option value="10">10 mi</option>
-      <option value="25">25 mi</option>
-      <option value="50">50 mi</option>
-      <option value="100">100 mi</option>
-    </select>
-  )}
-</div>
+          {search.city.trim() !== "" && (
+            <select
+              className="radius-select"
+              value={search.radius}
+              onChange={(event) =>
+                onChange(
+                  search.id,
+                  "radius",
+                  event.target.value
+                )
+              }
+            >
+              <option value="">Radius</option>
+              <option value="5">5 mi</option>
+              <option value="10">10 mi</option>
+              <option value="25">25 mi</option>
+              <option value="50">50 mi</option>
+              <option value="100">100 mi</option>
+            </select>
+          )}
+        </div>
 
         <div className="search-divider" />
 
-        {/* Start Date */}
-<div className="search-field search-date">
-  <CalendarIcon />
+        {/* Date Range */}
+        <div
+          className="search-field search-date-range"
+          ref={datePickerRef}
+        >
+          <button
+            type="button"
+            className="date-range-button"
+            onClick={() =>
+              setDatePickerOpen(!datePickerOpen)
+            }
+          >
+            <CalendarIcon />
 
-  <input
-    type="date"
-    value={search.startDate}
-    onChange={(event) =>
-      onChange(
-        search.id,
-        "startDate",
-        event.target.value
-      )
-    }
-  />
-</div>
+            <span>
+              {dateText}
+            </span>
+          </button>
 
-<div className="search-divider" />
+          {datePickerOpen && (
+            <div className="date-range-picker">
 
-{/* End Date */}
-<div className="search-field search-date">
-  <CalendarIcon />
+              <div className="date-range-header">
+                <strong>
+                  Select dates
+                </strong>
+              </div>
 
-  <input
-    type="date"
-    value={search.endDate}
-    onChange={(event) =>
-      onChange(
-        search.id,
-        "endDate",
-        event.target.value
-      )
-    }
-  />
-</div>
+              <div className="date-range-fields">
+
+                {/* Start Date */}
+                <div className="date-picker-field">
+                  <label>
+                    Start date
+                  </label>
+
+                  <input
+                    type="date"
+                    value={search.startDate}
+                    onChange={
+                      handleStartDateChange
+                    }
+                  />
+                </div>
+
+                {/* End Date */}
+                <div className="date-picker-field">
+                  <label>
+                    End date
+                  </label>
+
+                  <input
+                    type="date"
+                    value={search.endDate}
+                    min={
+                      search.startDate
+                        ? search.startDate
+                        : undefined
+                    }
+                    onChange={
+                      handleEndDateChange
+                    }
+                  />
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                className="date-done-button"
+                onClick={() =>
+                  setDatePickerOpen(false)
+                }
+              >
+                DONE
+              </button>
+
+            </div>
+          )}
+        </div>
 
       </div>
 
-      {/* Remove search */}
+      {/* Remove Search */}
       {onRemove && (
         <button
-  type="button"
-  className="remove-search"
-  onClick={() => onRemove(search.id)}
-  aria-label="Remove search"
->
-  ×
-</button>
+          type="button"
+          className="remove-search"
+          onClick={() =>
+            onRemove(search.id)
+          }
+          aria-label="Remove search"
+        >
+          ×
+        </button>
       )}
 
     </div>

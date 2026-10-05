@@ -238,29 +238,41 @@ function navigateTo(newPage) {
 
   // Search all search bars
   async function handleSearchAll() {
-    setSearchError(null);
+  // Clear previous search errors
+  setSearches((currentSearches) =>
+    currentSearches.map((search) => ({
+      ...search,
+      error: null,
+    }))
+  );
 
-    // Only search rows that have an artist
-    const activeSearches = searches.filter(
-      (search) => search.artists.trim() !== ""
+  // Check if at least one artist was entered
+  const activeSearches = searches.filter(
+    (search) => search.artists.trim() !== ""
+  );
+
+  if (activeSearches.length === 0) {
+    setSearches((currentSearches) =>
+      currentSearches.map((search, index) => ({
+        ...search,
+        error:
+          index === 0
+            ? "Please enter at least one artist."
+            : null,
+      }))
     );
 
-    if (activeSearches.length === 0) {
-      setSearchError(
-        "Please enter at least one artist."
-      );
+    return;
+  }
 
-      return;
-    }
-
-    setSubmittedSearches(activeSearches);
-    setHasSearched(true);
+  setSubmittedSearches(activeSearches);
+  setHasSearched(true);
 
     // Validate every search before making requests
     for (const search of activeSearches) {
       if (
         search.endDate &&
-        search.endDate <= search.startDate
+        search.endDate < search.startDate
       ) {
         updateSearch(
           search.id,
@@ -530,12 +542,7 @@ function navigateTo(newPage) {
             Find your next concert!
           </div>
         )}
-        {/* General search error */}
-        {searchError && (
-          <div className="search-error">
-            {searchError}
-          </div>
-        )}
+
 
         {/* Loading */}
         {searching && (
