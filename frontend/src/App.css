@@ -648,7 +648,7 @@ body {
   border: none;
 
   background: transparent;
-  color: var(--purple-bright);
+  color: var(--purple);
   font-family: var(--pixel-font);
   font-size: 9px;
 
@@ -683,7 +683,7 @@ body {
   border: none;
   border-radius: 3px;
 
-  background: var(--purple-bright);
+  background: var(--purple);
   color: #17051f;
   font-family: var(--pixel-font);
   font-size: 8px;
