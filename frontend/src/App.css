@@ -1146,11 +1146,7 @@ body {
   font-size: 18px;
   color: var(--text);
   font-family: var(--body-font);
-  
-
-
 }
-
 
 /* ========================================
    ARTIST INPUT
@@ -1262,7 +1258,7 @@ body {
 }
 
 .saved-artists-header span {
-  color: var(--purple-bright);
+  color: var(--purple);
 
   font-family: var(--body-font);
   font-size: 18px;
@@ -1354,7 +1350,7 @@ body {
   border: none;
   border-radius: 50%;
 
-  background: var(--purple);
+  background: var(--purple-bright);
 
   color: #17051f;
 

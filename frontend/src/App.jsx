@@ -259,18 +259,51 @@ function navigateTo(newPage) {
 );
 
   if (activeSearches.length === 0) {
-    setSearches((currentSearches) =>
-      currentSearches.map((search, index) => ({
-        ...search,
-        error:
-          index === 0
-            ? "Please enter at least one artist."
-            : null,
-      }))
+  setSearches((currentSearches) =>
+    currentSearches.map((search, index) => ({
+      ...search,
+      error:
+        index === 0
+          ? "Please enter at least one artist."
+          : null,
+    }))
+  );
+
+  return;
+}
+
+// Check that My Artists has at least one saved artist
+const savedArtists = (() => {
+  try {
+    return JSON.parse(
+      localStorage.getItem("concert-tracker-my-artists") || "[]"
     );
+  } catch {
+    return [];
+  }
+})();
+
+const hasSavedArtists =
+  Array.isArray(savedArtists) && savedArtists.length > 0;
+
+const emptyMyArtistsSearch = activeSearches.find(
+  (search) => search.myArtistsSelected && !hasSavedArtists
+);
+
+if (emptyMyArtistsSearch) {
+  setSearches((currentSearches) =>
+    currentSearches.map((search) => ({
+      ...search,
+      error:
+        search.id === emptyMyArtistsSearch.id
+          ? "Please save at least one artist."
+          : null,
+    }))
+  );
 
     return;
-  }
+}
+
 
   setSubmittedSearches(activeSearches);
   setHasSearched(true);
