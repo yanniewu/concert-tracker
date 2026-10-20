@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 
 :root {
-  --bg: #050518;
+  --bg: hsl(240, 66%, 6%);
   --surface: #080821;
-  --surface-light: #11113a;
 
   --purple: #a855f7;
   --purple-bright: #b426e4;
@@ -146,8 +145,8 @@ body {
   min-height: 100vh;
   background-image: url("./assets/pixel-city.png");
   background-repeat: no-repeat;
-  background-position: right 100px;
-  background-size: 70% auto;
+  background-position: 385px 45px;
+  background-size: 65% auto;
 }
 
 .app.artists-page {
@@ -470,7 +469,7 @@ body {
 .date-range-header {
   margin-bottom: 18px;
 
-  color: var(--purple-bright);
+  color: var(--purple);
 
   font-family: var(--pixel-font);
   font-size: 10px;
@@ -511,7 +510,7 @@ body {
 
   border: 1px solid var(--border);
 
-  background: var(--bg);
+  background: var(--surface);
   color: var(--text);
 
   font-family: var(--body-font);
@@ -608,7 +607,7 @@ body {
   border: none;
   border-radius: 50%;
 
-  background: var(--purple);
+  background: var(--purple-bright);
   color: #17051f;
 
   font-family: Arial, sans-serif;
@@ -649,7 +648,7 @@ body {
   border: none;
 
   background: transparent;
-  color: var(--purple);
+  color: var(--purple-bright);
   font-family: var(--pixel-font);
   font-size: 9px;
 
@@ -662,7 +661,6 @@ body {
 }
 
 .add-search-button:hover {
-  background: var(--surface);
   color: var(--text);
   border-color: #3f3f4a;
 }
@@ -685,7 +683,7 @@ body {
   border: none;
   border-radius: 3px;
 
-  background: var(--purple);
+  background: var(--purple-bright);
   color: #17051f;
   font-family: var(--pixel-font);
   font-size: 8px;
@@ -765,7 +763,7 @@ body {
 }
 
 .results-count {
-  color: var(--purple-bright);
+  color: var(--purple);
   font-family: var(--body-font);
   font-size: 18px;
 }
