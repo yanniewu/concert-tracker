@@ -190,6 +190,123 @@ body {
   flex: 1;
 }
 
+
+
+/* Artist search field */
+.search-artists {
+  position: relative;
+  overflow: visible;
+}
+
+/* My Artists dropdown */
+.my-artists-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+
+  z-index: 1000;
+  padding: 4px;
+}
+
+/* Dropdown option */
+.my-artists-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+
+  background: #ffffff;
+  border: none;
+  border-radius: 7px;
+  text-align: left;
+  cursor: pointer;
+  color: #222222;
+
+  transition: background-color 0.15s ease;
+}
+
+/* Hover state */
+.my-artists-option:hover {
+  background: #e9eaea;
+}
+
+/* Star icon */
+.my-artists-option-icon {
+  font-size: 18px;
+  color: #555555;
+}
+
+/* Text and saved artist count */
+.my-artists-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.my-artists-option-text strong {
+  font-size: 18px;
+  font-family: var(--body-font);
+}
+
+.my-artists-option-text small {
+  font-size: 15px;
+  font-family: var(--body-font);
+  color: var(--text-muted);
+}
+
+/* Selection checkmark */
+.my-artists-check {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* Circular checkbox */
+.my-artists-checkbox {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #c4c4cc;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #ffffff;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+/* Checkmark SVG */
+.my-artists-check-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Selected circle */
+.my-artists-option.selected .my-artists-checkbox {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: #ffffff;
+}
+
+
 .search-artists {
   flex: 2;
 }

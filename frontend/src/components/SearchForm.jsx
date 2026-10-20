@@ -134,28 +134,39 @@ function SearchForm({
   const datePickerRef = useRef(null);
 
   // Close date picker when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        datePickerRef.current &&
-        !datePickerRef.current.contains(event.target)
-      ) {
-        setDatePickerOpen(false);
-      }
+  
+useEffect(() => {
+  function handleClickOutside(event) {
+    if (
+      datePickerRef.current &&
+      !datePickerRef.current.contains(event.target)
+    ) {
+      setDatePickerOpen(false);
     }
 
-    document.addEventListener(
+    if (
+      artistsFieldRef.current &&
+      !artistsFieldRef.current.contains(event.target)
+    ) {
+      setMyArtistsOpen(false);
+      setArtistsFocused(false);
+    }
+    
+  }
+
+  document.addEventListener(
+    "mousedown",
+    handleClickOutside
+  );
+
+  return () => {
+    document.removeEventListener(
       "mousedown",
       handleClickOutside
     );
+  };
+}, []);
 
-    return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside
-      );
-    };
-  }, []);
 
   function handleStartDateChange(event) {
     const startDate = event.target.value;
@@ -196,6 +207,11 @@ function SearchForm({
       : search.startDate
         ? `${formatDate(search.startDate)} → End date`
         : "Select dates";
+  
+const [myArtistsOpen, setMyArtistsOpen] = useState(false);
+const [savedArtists, setSavedArtists] = useState([]);
+const artistsFieldRef = useRef(null);
+const [artistsFocused, setArtistsFocused] = useState(false);
 
   return (
     <div className="search-row">
@@ -203,22 +219,119 @@ function SearchForm({
       <div className="search-bar">
 
         {/* Artists */}
-        <div className="search-field search-artists">
-          <SearchIcon />
+       
+{/* Artists */}
+<div
+  className="search-field search-artists"
+  ref={artistsFieldRef}
+>
+  <SearchIcon />
 
-          <input
-            type="text"
-            value={search.artists}
-            onChange={(event) =>
-              onChange(
-                search.id,
-                "artists",
-                event.target.value
-              )
-            }
-            placeholder="Search artists..."
-          />
-        </div>
+  
+<input
+  type="text"
+  value={
+    artistsFocused
+      ? search.artists
+      : search.myArtistsSelected
+        ? "My Artists"
+        : search.artists
+  }
+  onFocus={() => {
+    setArtistsFocused(true);
+
+    // Clear the displayed label when reopening My Artists
+    if (search.myArtistsSelected) {
+      onChange(search.id, "artists", "");
+    }
+
+    try {
+      const artists = JSON.parse(
+        localStorage.getItem(
+          "concert-tracker-my-artists"
+        ) || "[]"
+      );
+
+      setSavedArtists(
+        Array.isArray(artists) ? artists : []
+      );
+    } catch {
+      setSavedArtists([]);
+    }
+
+    setMyArtistsOpen(true);
+  }}
+  onBlur={() => {
+    setArtistsFocused(false);
+  }}
+  onChange={(event) => {
+    onChange(
+      search.id,
+      "artists",
+      event.target.value
+    );
+
+    // Typing manually switches off My Artists mode
+    onChange(
+      search.id,
+      "myArtistsSelected",
+      false
+    );
+  }}
+  placeholder="Search artists..."
+/>
+
+
+  {myArtistsOpen && (
+    <div className="my-artists-dropdown">
+
+     
+<button
+  type="button"
+  className={`my-artists-option ${
+    search.myArtistsSelected ? "selected" : ""
+  }`}
+  onMouseDown={(event) => event.preventDefault()}
+  onClick={() =>
+    onChange(
+      search.id,
+      "myArtistsSelected",
+      !search.myArtistsSelected
+    )
+  }
+>
+  <span className="my-artists-checkbox">
+    {search.myArtistsSelected && (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        className="my-artists-check-icon"
+      >
+        <path
+          d="M5 12.5l4.5 4.5L19 7"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    )}
+  </span>
+
+  <span className="my-artists-option-text">
+    <strong>My Artists</strong>
+    <small>
+      {savedArtists.length} saved{" "}
+      {savedArtists.length === 1 ? "artist" : "artists"}
+    </small>
+  </span>
+</button>
+
+    </div>
+  )}
+</div>
+
 
         <div className="search-divider" />
 

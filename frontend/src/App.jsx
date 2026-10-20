@@ -87,6 +87,7 @@ function createSearch() {
     events: [],
     loading: false,
     error: null,
+    myArtistsSelected: false,
   };
 }
 
@@ -186,7 +187,11 @@ function navigateTo(newPage) {
 
   // Search Ticketmaster for one search
   async function searchConcerts(search) {
-    const artistList = search.artists
+    const artistList = search.myArtistsSelected
+  ? JSON.parse(
+      localStorage.getItem("concert-tracker-my-artists") || "[]"
+    ).map((artist) => artist.name).filter(Boolean)
+  : search.artists
       .split(",")
       .map((artist) => artist.trim())
       .filter((artist) => artist !== "");
@@ -248,8 +253,10 @@ function navigateTo(newPage) {
 
   // Check if at least one artist was entered
   const activeSearches = searches.filter(
-    (search) => search.artists.trim() !== ""
-  );
+  (search) =>
+    search.artists.trim() !== "" ||
+    search.myArtistsSelected
+);
 
   if (activeSearches.length === 0) {
     setSearches((currentSearches) =>
@@ -394,12 +401,14 @@ function navigateTo(newPage) {
     groupEventsByMonth(allEvents);
 
   // Get months that actually contain results
+  // Get months covered by all submitted searches
   const resultMonths = [
     ...new Set(
       submittedSearches
         .filter(
           (search) =>
-            search.artists.trim() !== "" &&
+            (search.artists.trim() !== "" ||
+              search.myArtistsSelected) &&
             search.startDate
         )
         .flatMap((search) =>
@@ -612,9 +621,10 @@ function navigateTo(newPage) {
           !searchError &&
           allEvents.length === 0 &&
           searches.some(
-            (search) =>
-              search.artists.trim() !== ""
-          ) && (
+  (search) =>
+    search.artists.trim() !== "" ||
+    search.myArtistsSelected
+) && (
             <div className="no-results">
               <p>
                 We couldn't find any concerts
